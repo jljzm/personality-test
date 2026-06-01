@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>稀有物种 · 人格原型测试</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap');
+body{
+    font-family:'Noto Serif SC','Microsoft YaHei',serif;
+    min-height:100vh;display:flex;justify-content:center;align-items:center;
+    padding:20px;background:#0a0a14;overflow-x:hidden
+}
+:root{
+    --bg:#0a0a14;--gold:#d4a853;--rose:#c0395a;--purple:#604080;--teal:#2a7060;
+    --text:rgba(240,230,208,0.85);--text-dim:rgba(240,230,208,0.35)
+}
+.bg-wrap{
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    pointer-events:none;z-index:0;overflow:hidden
+}
+.bg-orb{
+    position:absolute;border-radius:50%;filter:blur(100px);
+    animation:orbDrift 20s ease-in-out infinite alternate
+}
+.bg-orb:nth-child(1){width:500px;height:500px;background:rgba(192,57,90,0.08);top:-150px;right:-100px;animation-duration:18s}
+.bg-orb:nth-child(2){width:450px;height:450px;background:rgba(212,168,83,0.06);bottom:-120px;left:-120px;animation-duration:22s;animation-delay:-6s}
+.bg-orb:nth-child(3){width:350px;height:350px;background:rgba(96,64,128,0.06);top:40%;left:60%;animation-duration:16s;animation-delay:-12s}
+.bg-orb:nth-child(4){width:200px;height:200px;background:rgba(42,112,96,0.05);top:20%;left:10%;animation-duration:14s;animation-delay:-3s}
+@keyframes orbDrift{
+    0%{transform:translate(0,0)scale(1)}
+    25%{transform:translate(40px,-30px)scale(1.08)}
+    50%{transform:translate(-20px,40px)scale(0.95)}
+    75%{transform:translate(30px,20px)scale(1.05)}
+    100%{transform:translate(-40px,-20px)scale(1)}
+}
+.particles{
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    pointer-events:none;z-index:0
+}
+.particle{
+    position:absolute;width:3px;height:3px;
+    background:rgba(212,168,83,0.3);border-radius:50%;
+    animation:particleFloat 8s ease-in-out infinite alternate
+}
+@keyframes particleFloat{
+    0%{opacity:0.05;transform:translateY(0)scale(0.8)}
+    50%{opacity:0.4}
+    100%{opacity:0.05;transform:translateY(-60px)scale(1.2)}
+}
+body::after{
+    content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");
+    pointer-events:none;z-index:0
+}
+#app{position:relative;z-index:1;width:740px;max-width:100%}
+#splash{text-align:center;padding:60px 30px 50px}
+.splash-icon{font-size:48px;display:block;margin-bottom:20px;animation:iconGlow 3s ease-in-out infinite alternate}
+@keyframes iconGlow{
+    0%{filter:drop-shadow(0 0 15px rgba(212,168,83,0.1))}
+    100%{filter:drop-shadow(0 0 40px rgba(212,168,83,0.3))}
+}
+.splash-line{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 24px;opacity:0.3}
+.splash-preamble{font-size:15px;color:var(--text-dim);line-height:2;letter-spacing:2px;margin-bottom:20px;max-width:520px;margin-left:auto;margin-right:auto}
+.splash-preamble strong{color:var(--gold);font-weight:600}
+.splash-quote{font-size:14px;color:rgba(240,230,208,0.15);font-style:italic;letter-spacing:3px;margin-bottom:30px;line-height:1.8}
+.splash-btn{
+    display:inline-block;padding:14px 48px;background:transparent;
+    border:1px solid rgba(212,168,83,0.25);border-radius:30px;
+    color:var(--gold);font-size:15px;font-family:inherit;
+    letter-spacing:6px;cursor:pointer;transition:all 0.4s ease;position:relative
+}
+.splash-btn::before{
+    content:'';position:absolute;top:-1px;left:-1px;right:-1px;bottom:-1px;
+    border-radius:30px;
+    background:linear-gradient(135deg,rgba(212,168,83,0.1),transparent,rgba(192,57,90,0.05),transparent);
+    opacity:0;transition:opacity 0.4s ease
+}
+.splash-btn:hover{border-color:rgba(212,168,83,0.5);box-shadow:0 0 40px rgba(212,168,83,0.06),0 0 80px rgba(192,57,90,0.04);transform:translateY(-2px)}
+.splash-btn:hover::before{opacity:1}
+.splash-btn span{position:relative;z-index:1}
+.splash-decree{font-size:10px;color:rgba(240,230,208,0.06);letter-spacing:6px;margin-top:24px}
+.card{
+    background:rgba(10,10,20,0.78);backdrop-filter:blur(24px)saturate(1.3);
+    -webkit-backdrop-filter:blur(24px)saturate(1.3);border-radius:16px;
+    padding:35px;border:1px solid rgba(212,168,83,0.06);
+    box-shadow:0 0 80px rgba(0,0,0,0.5),0 0 160px rgba(192,57,90,0.03),inset 0 0 60px rgba(212,168,83,0.02);
+    position:relative;overflow:hidden
+}
+.card::before{
+    content:'';position:absolute;top:-60%;left:-30%;
+    width:160%;height:200%;
+    background:radial-gradient(ellipse at 40% 30%,rgba(212,168,83,0.02) 0%,transparent 60%);
+    pointer-events:none
+}
+.card-cr{position:absolute;width:24px;height:24px;opacity:0.08}
+.card-cr::before,.card-cr::after{content:'';position:absolute;background:var(--gold)}
+.card-cr.tl{top:14px;left:14px}
+.card-cr.tl::before{width:16px;height:1px;top:0;left:0}
+.card-cr.tl::after{width:1px;height:16px;top:0;left:0}
+.card-cr.tr{top:14px;right:14px}
+.card-cr.tr::before{width:16px;height:1px;top:0;right:0}
+.card-cr.tr::after{width:1px;height:16px;top:0;right:0}
+.card-cr.bl{bottom:14px;left:14px}
+.card-cr.bl::before{width:16px;height:1px;bottom:0;left:0}
+.card-cr.bl::after{width:1px;height:16px;bottom:0;left:0}
+.card-cr.br{bottom:14px;right:14px}
+.card-cr.br::before{width:16px;height:1px;bottom:0;right:0}
+.card-cr.br::after{width:1px;height:16px;bottom:0;right:0}
+.pr-wrap{margin-bottom:28px}
+.pr-lb{display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);letter-spacing:2px;margin-bottom:10px}
+.pr-bar{width:100%;height:2px;background:rgba(212,168,83,0.05);border-radius:1px;overflow:hidden}
+.pr-fill{height:100%;background:linear-gradient(90deg,var(--rose),var(--gold));border-radius:1px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);width:0%;box-shadow:0 0 12px rgba(192,57,90,0.2)}
+#qa{min-height:200px}
+.qtext{font-size:19px;color:var(--text);line-height:1.9;margin-bottom:28px;letter-spacing:0.5px;position:relative;padding-left:20px}
+.qtext::before{content:'';position:absolute;left:0;top:0.4em;bottom:0.4em;width:2px;background:linear-gradient(180deg,var(--rose),transparent);border-radius:1px}
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt-btn{
+    width:100%;padding:15px 20px;background:rgba(240,230,208,0.02);
+    border:1px solid rgba(212,168,83,0.06);border-radius:10px;
+    color:var(--text);font-size:14px;font-family:inherit;
+    cursor:pointer;transition:all 0.25s ease;text-align:left;line-height:1.6;letter-spacing:0.3px
+}
+.opt-btn:hover{
+    background:rgba(192,57,90,0.08);border-color:rgba(192,57,90,0.2);
+    transform:translateX(5px);box-shadow:0 0 25px rgba(192,57,90,0.04)
+}
+#ra{display:none}
+#ra.show{display:block}
+.rhead{text-align:center;margin-bottom:22px}
+.riw{display:inline-block;position:relative;margin-bottom:12px}
+.ricon{display:block;animation:rp 4s ease-in-out infinite alternate;margin:0 auto}
+@keyframes rp{0%{filter:drop-shadow(0 0 15px rgba(212,168,83,0.1))}100%{filter:drop-shadow(0 0 40px rgba(212,168,83,0.25))}}
+.rring{position:absolute;top:50%;left:50%;width:124px;height:124px;transform:translate(-50%,-50%);border:1px solid rgba(212,168,83,0.08);border-radius:50%;animation:rr 20s linear infinite;pointer-events:none}
+.rring2{position:absolute;top:50%;left:50%;width:142px;height:142px;transform:translate(-50%,-50%);border:1px dashed rgba(212,168,83,0.04);border-radius:50%;animation:rr 30s linear infinite reverse;pointer-events:none}
+@keyframes rr{0%{transform:translate(-50%,-50%)rotate(0deg)}100%{transform:translate(-50%,-50%)rotate(360deg)}}
+.rtitle{font-size:30px;color:var(--gold);font-weight:700;letter-spacing:6px;margin-bottom:4px}
+.ren{font-size:11px;color:var(--text-dim);letter-spacing:4px;text-transform:uppercase}
+.rdiv{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:22px auto;opacity:0.25}
+.rbody{column-count:2;column-gap:24px;column-rule:1px solid rgba(212,168,83,0.03);text-align:justify}
+.rp{font-size:14px;color:var(--text);line-height:2.05;letter-spacing:0.4px;break-inside:avoid;margin-bottom:18px;opacity:0.82}
+.rp strong{color:var(--gold);font-weight:600;opacity:1}
+.rp .rs{color:var(--rose)}
+.rtags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;break-inside:avoid}
+.rtag{display:inline-block;padding:3px 14px;border:1px solid rgba(212,168,83,0.12);border-radius:20px;color:rgba(212,168,83,0.45);font-size:11px;letter-spacing:1px}
+.rq{font-size:13px;color:rgba(240,230,208,0.18);font-style:italic;text-align:right;margin-top:16px;letter-spacing:1px;border-top:1px solid rgba(212,168,83,0.03);padding-top:16px}
+.fade-in{animation:fi 0.55s cubic-bezier(0.34,1.56,0.64,1) forwards}
+@keyframes fi{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.hidden{display:none!important}
+@media(max-width:600px){
+    .card{padding:20px;border-radius:12px}
+    .rbody{column-count:1}
+    .qtext{font-size:16px;padding-left:14px}
+    .rtitle{font-size:24px}
+    #splash{padding:40px 20px 30px}
+    .splash-preamble{font-size:14px}
+}
+</style>
+</head>
+<body>
+<div class="bg-wrap"><div class="bg-orb"></div><div class="bg-orb"></div><div class="bg-orb"></div><div class="bg-orb"></div></div>
+<div class="particles" id="pt"></div>
+
+<div id="app">
+<div id="splash">
+    <span class="splash-icon">✦</span>
+    <div class="splash-line"></div>
+    <div class="splash-preamble">
+        在这个越来越孤立与冷漠的世界里，<br>
+        每个人都在寻找自己存在的痕迹。<br>
+        你以为自己普通。<br>
+        但有些特质，<strong>比任何标签都稀有，且无法被复刻</strong>。
+    </div>
+    <div class="splash-quote">
+        「世界上没有两片完全相同的云，<br>也没有两个完全相同的你。」
+    </div>
+    <button class="splash-btn" onclick="enter()"><span>开始测试</span></button>
+    <div class="splash-decree">✦ ✦ ✦</div>
+    <div style="margin-top:32px;font-size:11px;color:rgba(240,230,208,0.1);letter-spacing:2px;font-family:serif">设计 · 善良Ctrl Z</div>
+</div>
+
+<div id="tc" class="hidden">
+<div class="card">
+<div class="card-cr tl"></div><div class="card-cr tr"></div><div class="card-cr bl"></div><div class="card-cr br"></div>
+
+<div class="pr-wrap">
+    <div class="pr-lb"><span id="ql">原 初 映 像</span><span id="qp">1 / 15</span></div>
+    <div class="pr-bar"><div class="pr-fill" id="pf"></div></div>
+</div>
+
+<div id="qa">
+    <div class="qtext" id="qt"></div>
+    <div class="opt" id="opt"></div>
+</div>
+
+<div id="ra">
+    <div class="rhead">
+        <div class="riw">
+            <span class="ricon" id="ri"></span>
+            <div class="rring"></div><div class="rring2"></div>
+        </div>
+        <div class="rtitle" id="rt"></div>
+        <div class="ren" id="re"></div>
+    </div>
+    <div class="rdiv"></div>
+    <div class="rbody">
+        <div class="rp" id="rp1"></div>
+        <div class="rp" id="rp2"></div>
+        <div class="rp" id="rp3"></div>
+        <div class="rtags" id="rts"></div>
+    </div>
+    <div class="rq" id="rq"></div>
+    <div style="text-align:center;margin-top:20px">
+        <button class="splash-btn" onclick="reset()" style="padding:10px 36px;font-size:13px"><span>重新探寻</span></button>
+    </div>
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+(function(){
+    const c=document.getElementById('pt');
+    for(let i=0;i<45;i++){
+        const p=document.createElement('div');
+        p.className='particle';
+        p.style.left=Math.random()*100+'%';
+        p.style.top=Math.random()*100+'%';
+        const s=2+Math.random()*2;
+        p.style.width=s+'px';p.style.height=p.style.width;
+        p.style.animationDelay=Math.random()*8+'s';
+        p.style.animationDuration=(6+Math.random()*6)+'s';
+        c.appendChild(p);
+    }
+})();
+
+function enter(){
+    document.getElementById('splash').classList.add('hidden');
+    document.getElementById('tc').classList.remove('hidden');
+    go();
+}
+
+const SVI={
+  d:'<svg viewBox="0 0 120 120" width="104" height="104"><defs><radialGradient id="gd" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#d4a853" stop-opacity="0.5"/><stop offset="60%" stop-color="#c0395a" stop-opacity="0.15"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs><ellipse cx="42" cy="38" rx="24" ry="12" fill="url(#gd)" opacity="0.6"/><ellipse cx="60" cy="44" rx="30" ry="18" fill="none" stroke="rgba(212,168,83,0.12)" stroke-width="0.5"/><ellipse cx="64" cy="50" rx="26" ry="14" fill="none" stroke="rgba(212,168,83,0.06)" stroke-width="0.5"/><ellipse cx="48" cy="56" rx="22" ry="10" fill="none" stroke="rgba(192,57,90,0.06)" stroke-width="0.6"/><ellipse cx="76" cy="48" rx="20" ry="8" fill="none" stroke="rgba(212,168,83,0.05)" stroke-width="0.5"/><ellipse cx="50" cy="78" rx="4" ry="6" fill="rgba(212,168,83,0.06)" stroke="rgba(212,168,83,0.08)" stroke-width="0.5"/><ellipse cx="68" cy="82" rx="3" ry="5" fill="rgba(192,57,90,0.04)" stroke="rgba(192,57,90,0.06)" stroke-width="0.5"/></svg>',
+  n:'<svg viewBox="0 0 120 120" width="104" height="104"><defs><linearGradient id="gn" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="transparent"/><stop offset="40%" stop-color="#604080" stop-opacity="0.15"/><stop offset="80%" stop-color="#c0395a" stop-opacity="0.08"/><stop offset="100%" stop-color="#d4a853" stop-opacity="0.2"/></linearGradient></defs><rect x="10" y="30" width="100" height="62" fill="url(#gn)" rx="2"/><line x1="20" y1="52" x2="100" y2="40" stroke="rgba(212,168,83,0.08)" stroke-width="0.8"/><line x1="15" y1="58" x2="105" y2="46" stroke="rgba(212,168,83,0.06)" stroke-width="1.2"/><line x1="18" y1="64" x2="102" y2="52" stroke="rgba(96,64,128,0.08)" stroke-width="0.6"/><line x1="22" y1="70" x2="98" y2="58" stroke="rgba(42,112,96,0.06)" stroke-width="0.5"/><circle cx="30" cy="38" r="1" fill="rgba(212,168,83,0.2)"/><circle cx="50" cy="35" r="0.8" fill="rgba(212,168,83,0.15)"/><circle cx="80" cy="36" r="1.2" fill="rgba(212,168,83,0.12)"/></svg>',
+  i:'<svg viewBox="0 0 120 120" width="104" height="104"><defs><radialGradient id="gi" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#d4a853" stop-opacity="0.4"/><stop offset="50%" stop-color="#c0395a" stop-opacity="0.08"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs><line x1="40" y1="28" x2="44" y2="24" stroke="rgba(212,168,83,0.3)" stroke-width="1.5"/><line x1="44" y1="24" x2="48" y2="28" stroke="rgba(212,168,83,0.3)" stroke-width="1.5"/><line x1="48" y1="28" x2="40" y2="28" stroke="rgba(212,168,83,0.3)" stroke-width="1.5"/><line x1="72" y1="36" x2="76" y2="32" stroke="rgba(212,168,83,0.25)" stroke-width="1.2"/><line x1="76" y1="32" x2="80" y2="36" stroke="rgba(212,168,83,0.25)" stroke-width="1.2"/><line x1="80" y1="36" x2="72" y2="36" stroke="rgba(212,168,83,0.25)" stroke-width="1.2"/><line x1="28" y1="50" x2="32" y2="46" stroke="rgba(192,57,90,0.2)" stroke-width="1"/><line x1="32" y1="46" x2="36" y2="50" stroke="rgba(192,57,90,0.2)" stroke-width="1"/><line x1="36" y1="50" x2="28" y2="50" stroke="rgba(192,57,90,0.2)" stroke-width="1"/><line x1="60" y1="56" x2="64" y2="52" stroke="rgba(212,168,83,0.2)" stroke-width="1"/><line x1="64" y1="56" x2="68" y2="52" stroke="rgba(212,168,83,0.2)" stroke-width="1"/><line x1="68" y1="56" x2="60" y2="56" stroke="rgba(212,168,83,0.2)" stroke-width="1"/></svg>',
+  f:'<svg viewBox="0 0 120 120" width="104" height="104"><defs><radialGradient id="gf" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c0395a" stop-opacity="0.4"/><stop offset="30%" stop-color="#d4a853" stop-opacity="0.15"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs><line x1="60" y1="80" x2="60" y2="30" stroke="rgba(212,168,83,0.15)" stroke-width="1.5"/><ellipse cx="60" cy="28" rx="18" ry="12" fill="url(#gf)" opacity="0.6"/><path d="M52 30 Q56 18 60 24" stroke="rgba(212,168,83,0.4)" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M60 24 Q64 18 68 30" stroke="rgba(192,57,90,0.3)" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M56 26 Q58 14 62 20" stroke="rgba(212,168,83,0.2)" stroke-width="1" fill="none" stroke-linecap="round"/><circle cx="50" cy="22" r="1.5" fill="rgba(212,168,83,0.15)"/><circle cx="70" cy="24" r="1" fill="rgba(192,57,90,0.12)"/></svg>',
+  p:'<svg viewBox="0 0 120 120" width="104" height="104"><defs><linearGradient id="gpv" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="transparent"/><stop offset="40%" stop-color="#d4a853" stop-opacity="0.05"/><stop offset="70%" stop-color="#c0395a" stop-opacity="0.1"/><stop offset="100%" stop-color="#d4a853" stop-opacity="0.2"/></linearGradient></defs><line x1="10" y1="70" x2="110" y2="70" stroke="rgba(212,168,83,0.04)" stroke-width="0.5"/><rect x="54" y="15" width="12" height="55" fill="url(#gpv)" opacity="0.7"/><line x1="60" y1="22" x2="60" y2="68" stroke="rgba(212,168,83,0.08)" stroke-width="1"/><circle cx="60" cy="72" r="12" fill="none" stroke="rgba(212,168,83,0.08)" stroke-width="0.8"/><circle cx="60" cy="72" r="8" fill="rgba(212,168,83,0.04)"/></svg>',
+  r:'<svg viewBox="0 0 120 120" width="104" height="104"><defs><radialGradient id="gr" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c0395a" stop-opacity="0.3"/><stop offset="40%" stop-color="#d4a853" stop-opacity="0.08"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs><ellipse cx="60" cy="30" rx="30" ry="18" fill="rgba(10,10,20,0.3)" stroke="rgba(212,168,83,0.04)" stroke-width="0.5"/><path d="M40 45 Q35 60 30 85" stroke="rgba(192,57,90,0.25)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6"/><path d="M48 48 Q46 68 44 90" stroke="rgba(212,168,83,0.15)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/><path d="M55 42 Q54 58 53 78" stroke="rgba(192,57,90,0.35)" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.4"/><path d="M65 42 Q66 58 67 78" stroke="rgba(192,57,90,0.35)" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.4"/><path d="M72 48 Q74 68 76 90" stroke="rgba(212,168,83,0.15)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/><path d="M80 45 Q85 60 90 85" stroke="rgba(192,57,90,0.25)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6"/></svg>'
+};
+
+const Q=[
+{q:'你凝视水面时看见了自己的倒影——但那个影子似乎比"你"更陌生。当你意识到"自我"其实是一个不断被叙述的故事时，你的感受更接近哪一种？',O:[{t:'感到不安——如果自我是建构的，那我到底是谁？',s:{d:0,n:0,i:1,f:0,p:0,r:1}},{t:'释然——既然是故事，我就可以重新讲述它',s:{d:1,n:0,i:0,f:0,p:1,r:0}},{t:'好奇——谁在讲述这个故事？谁在听？',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'无所谓——故事也好，真实也好，我都在这里',s:{d:0,n:0,i:0,f:1,p:0,r:0}}]},
+{q:'如果你有机会"卸载"一段记忆——保留事实，只删除与之相关的情绪。你会做出这个选择吗？',O:[{t:'会——那是我想要的自在',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'不会——那些情绪塑造了我，删除它们等于背叛了自己',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'犹豫——我不确定没有了情绪的记忆，还算不算"我的"',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'好奇——删除之后，我会不会用另一种方式重新感受它？',s:{d:0,n:0,i:1,f:0,p:0,r:1}}]},
+{q:'当你对某个人产生强烈的反感时，你更倾向于如何看待这种情绪？',O:[{t:'这份反感或许反映了我自己不愿承认的部分',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'我的感受是有根据的——那个人确实有问题',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'我会分析——这种反感从何而来？创伤还是价值观冲突？',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'接受它，但不被它驱动',s:{d:0,n:0,i:1,f:0,p:0,r:0}}]},
+{q:'深夜有人在楼下喊你的名字。你的第一反应是？',O:[{t:'认定是听错了——理性的解释优先',s:{d:0,n:0,i:1,f:0,p:1,r:0}},{t:'心里隐约相信可能是某种不可见的存在',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'心跳加速，但不会去求证',s:{d:0,n:0,i:0,f:0,p:0,r:1}},{t:'走向窗边——必须亲眼确认',s:{d:0,n:0,i:0,f:1,p:0,r:0}}]},
+{q:'如果可以让你内心的某个声音永远沉默——那个总是贬低你、质疑你的声音——你愿意吗？',O:[{t:'愿意——它是我痛苦的根源',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'不愿意——它严厉，但也让我保持清醒',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'不确定——那声音也许有它存在的意义',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'我愿意，但我知道它不会真正消失',s:{d:1,n:0,i:0,f:0,p:0,r:0}}]},
+{q:'你做了一个决定，事后发现这个决定让很多人受益，唯独让你自己付出了代价。你的内心归因更接近？',O:[{t:'我本可以做出更好的选择',s:{d:0,n:0,i:0,f:0,p:1,r:0}},{t:'这本身就是我选择的意义——承担代价是我的意愿',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'这反映了某种深层模式——我需要理解它',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'不值得——我当初不该这么做',s:{d:0,n:0,i:1,f:0,p:0,r:0}}]},
+{q:'你走进一座古老的图书馆，空气中有樟木和时间的味道。书架上有一本书脊上没有标题的书。你会？',O:[{t:'抽出来——没有标题本身就是一种邀请',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'先看看其他有标题的书，最后再回来面对它',s:{d:0,n:0,i:0,f:0,p:1,r:0}},{t:'不碰它——有些未知不应该被打开',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'抽出它，但不会马上翻开——先感受它的重量和质感',s:{d:1,n:0,i:0,f:0,p:0,r:0}}]},
+{q:'如果你可以在没有任何社会惩罚的前提下，做一件完全"不道德"的事——你会想做什么？',O:[{t:'什么都不想做——道德对我而言不是约束，而是本能',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'我会想象它，但不会做——因为我的超我已经内化了规则',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'说实话，我脑海里闪过了一些画面',s:{d:0,n:0,i:0,f:0,p:0,r:0}},{t:'我在想的是——这个假设本身就是危险的',s:{d:0,n:0,i:1,f:1,p:0,r:0}}]},
+{q:'有人对你说："你变了。"你觉得这句话的背后隐含的是什么？',O:[{t:'成长本身就是一种背叛——对过去自己的背叛',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'我不在乎别人怎么看我',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'也许我真的变了——这让我重新审视自己',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'变或不变，我都是我，只是不同层面的显现',s:{d:0,n:0,i:1,f:0,p:0,r:1}}]},
+{q:'在你感到"存在性空虚"——也就是一切似乎都没有意义的时候——你的应对方式是？',O:[{t:'投身于创造——用做一些事来对抗虚无',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'阅读和思考——寻找他人如何面对这个问题',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'接受空虚——它可能不是敌人，而是必要的间隙',s:{d:0,n:0,i:1,f:0,p:0,r:1}},{t:'去连接——见朋友、和家人在一起',s:{d:1,n:0,i:0,f:0,p:1,r:0}}]},
+{q:'你站在高处——悬崖边、楼顶或阳台——往下看时会涌起一种复杂的冲动。那种感觉更接近哪一种描述？',O:[{t:'一种隐秘的吸引力——"如果跳下去会怎样？"',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'紧紧后退——身体比意识更知道危险',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'平静——高处让我感到自己是宏大叙事的一部分',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'兴奋——想迎风大喊',s:{d:0,n:0,i:0,f:1,p:0,r:0}}]},
+{q:'如果你照镜子时，镜子里的你突然做了一组与你不同的表情。你的第一反应是？',O:[{t:'盯着看——想知道ta接下来会做什么',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'后退——身体比意识更快感到了恐惧',s:{d:0,n:0,i:0,f:0,p:0,r:1}},{t:'强迫自己再做出一个表情，试图夺回控制',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'微笑——也许这才是"真实的我"',s:{d:1,n:0,i:0,f:0,p:0,r:0}}]},
+{q:'有人说："你喜欢的音乐暴露了你的防御机制。"你的第一反应是？',O:[{t:'想知道我的歌单揭示了什么',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'我觉得这太武断了',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'不自觉地想到自己最常听的几首歌',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'有点不舒服——不想被看穿',s:{d:1,n:0,i:0,f:0,p:0,r:0}}]},
+{q:'你在一段关系中发现自己总是反复吸引某一类型的人——即使你明确知道这种关系模式不健康。你觉得这是因为？',O:[{t:'也许我知道——我始终不确定自己值得怎样的爱',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'我在重复某种童年时期的依恋模式',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'因为那种人对我来说有某种致命的吸引力',s:{d:0,n:0,i:0,f:0,p:0,r:0}},{t:'我确实注意到了这个模式，但不知道如何打破它',s:{d:0,n:0,i:1,f:0,p:1,r:0}}]},
+{q:'在你生命的最后一刻，你希望自己最后一句想说的话是什么？',O:[{t:'"我尽力了。"',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'"我看到了别人没看到的东西。"',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'"原来如此。"',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'"我从未熄灭。"',s:{d:0,n:0,i:0,f:1,p:0,r:0}}]}
+];
+
+const LB=['原 初 映 像','记 忆 深 处','投 射 之 外','未 知 召 唤','内 在 声 音','代 价 的 重 量','无 名 之 书','道 德 边 界','变 与 不 变','虚 无 间 隙','高 处 的 秘 密','镜 中 之 镜','防 御 的 语 言','关 系 的 暗 流','终 极 命 题'];
+
+const R={
+d:{icon:'',title:'乳状云',en:'Mammatus Clouds',p1:'你看似柔和——像暴风雨前夕悬挂在天空的袋状云朵，绵软、低垂、仿佛不堪一击。但真正穿越过风暴的人会告诉你一个秘密：这些云朵悬在那里，不是因为软弱，而是因为它们正在承受整片天空的重量。<strong>你的温柔是一种经过选择的力量</strong>，而非天性的退让。',p2:'那些被你接住的人可能永远不会知道，你早已独自穿越过无数场暴雨。你从不展示伤口，但伤口已经长成了你的骨骼。你有一种近乎固执的平静——不是感受不到痛，而是你比任何人都清楚：<span class="rs">暴风雨终会过去，而留下来的人，是你</span>。',p3:'在这个鼓励尖叫的世界里，你选择了沉默的支撑。不是妥协，而是一种更深层的抵抗。你的力量不在摧毁，而在——当所有喧嚣平息之后，你依然站在那里，<strong>像天空本身</strong>。',tags:['柔中带刚','沉默的支撑者','风雨中的定力','经过选择的温柔'],quote:'—— 云不知道自己有多重，直到它托住了整场雨。'},
+n:{icon:'',title:'夜光云',en:'Noctilucent Clouds',p1:'你属于深夜。不是因为你阴郁，而是因为——<strong>只有在最深的黑暗中，才能看见你的光芒。</strong>夜光云——地球上最高的云，出现在大气层边缘，在夏夜的暮光中发出银蓝色的微光。它们如此罕见，以至于大多数人终其一生也无缘目睹。而你，就是这种存在。',p2:'你不容易被定义。你身上有一种\"来自很远的地方\"的气质——不是疏离，而是自有其轨道的从容。当别人忙着融入人群时，你在仰望你内心的宇宙。你不害怕孤独，因为你早已在孤独中找到了自己的语言。<span class="rs">那些不理解你的人，只是还没有学会如何在黑暗中辨认光芒。</span>',p3:'有人觉得你难以靠近。他们说对了一半——你确实不属于喧嚣的白天。但如果一个人走进了你的夜晚，他们会发现，你的光不是反射别人的，<strong>而是自己发出来的</strong>——而且那种光，比任何阳光都更温柔、更持久。',tags:['独行者','心怀远方','孤独但不寂寞','自有轨道'],quote:'—— 有些星星只在最深的夜里才肯现身。'},
+i:{icon:'',title:'冰针',en:'Diamond Dust',p1:'你是一种细微而坚定的存在。冰针——零下数十度的空气中悬浮的微小冰晶，肉眼几乎看不见，但在阳光照耀的瞬间，它们会折射出钻石般的光芒。<strong>在最严酷的环境里，你依然保有自己的光泽。</strong>你的伟大不在于轰轰烈烈，而在于那些不为人知的、细碎的坚持。',p2:'你可能不是第一眼就会被注意到的人。你也不追求这个。但真正走近你的人，会慢慢发现你的沉稳与坚韧——就像在冬日清晨突然看见空气中闪烁的钻石尘。那不是炫耀的光芒，而是一种<span class="rs">存在的证明</span>：在最寒冷的时候，你依然在发光。不是为了谁，只是因为你本来就可以。',p3:'你身上有一种不动声色的力量。不张扬、不喧嚣，却无人可以忽视。你的力量不在于能掀起多大的波澜，而在于——当一切都冻结的时候，<strong>你依然是那个在空气中细细闪烁的存在。</strong>微小，但不容否认。',tags:['于无声处闪耀','坚韧如冰','冷静的观察者','不炫耀的力量'],quote:'—— 钻石是碳原子在巨大压力下排列出的光芒。'},
+f:{icon:'',title:'圣艾尔摩之火',en:'St. Elmo\'s Fire',p1:'你身上有一种令人不安的炽热。圣艾尔摩之火——雷暴天气中出现在船桅顶端的电晕放电现象，它不是火焰，却有着火焰的形态和温度。你不是传统意义上的\"暴脾气\"，但你的能量是不可忽视的。<strong>当氛围不对时，你能第一个感觉到空气中带电粒子的骚动。</strong>你是风暴来临前空气里那一声无声的震颤。',p2:'你相信直觉，有时甚至到了近乎迷信的地步。不是因为你不理性，而是因为你捕捉到了太多别人忽略的信号——那些细微的，几乎无法言说的变化。你常常发现自己比所有人都更早\"闻到风雨的味道\"。<span class="rs">这不是超能力，而是你对世界保持着一种原始的，未被驯化的敏感。</span>',p3:'你最大的矛盾在于：你比谁都清晰，又比谁都冲动。你的行动总是先于语言，你的选择总是先于算计。但正是这种先于理智的决断力，让你在最关键的时刻做出了别人要犹豫很久才能做到的决定。<strong>你不是没有恐惧，而是愿意带着恐惧行动。</strong>',tags:['直觉敏锐','能量充沛','冲动但真诚','风暴的引信'],quote:'—— 船桅顶端的火光不是火，是空气在暴雨前发出的声音。'},
+p:{icon:'',title:'日柱',en:'Sun Pillar',p1:'你是微弱中的坚定发光者。日柱——阳光穿过冰晶折射形成的垂直光柱，它不像彩虹那样铺天盖地，而是一条笔直的，沉默的，向上的光路。你不是最明亮的光源，但你所散发出的光芒<strong>可以穿透一切</strong>。你的坚定，从来不需要很大的声音。',p2:'你有一种让人安心的持续性。不是那种激情四射的，而是细水长流的——每一天你都在，每一个你需要出现的时刻你都出现了。你给人的安全感，不是因为你承诺了什么，而是因为你<strong>一直在那里</strong>。<span class="rs">人们对你的信任，像光柱一样，是慢慢竖立起来的。</span>',p3:'你可能不太习惯成为焦点。但你知道吗？你不做焦点的时候，反而最耀眼。你像那些在极寒中静止的冰晶——你不需要移动，你的存在本身<strong>就已经足以指引方向</strong>。你照亮的是别人正在走的这条路，而不是你自己。',tags:['温和而坚定','可靠的光源','不喧哗自有声','他是引路人'],quote:'—— 最安静的光，往往照得最远。'},
+r:{icon:'',title:'红色精灵',en:'Red Sprites',p1:'你是这个世界上最难以捕捉的存在。红色精灵——发生在距离地面50至90公里高空的巨大放电现象，持续时间仅数毫秒，转瞬即逝，如同宇宙对你眨了眨眼。你有一种极端的美感，但这种美<strong>永远在消逝的边缘</strong>。别人追不上你，不是因为看不到你，而是因为——你来得太突然，走得又太干净。',p2:'你身上有一种\"完整地在场却又随时会离开\"的特质。你出现在别人的生命里时，总是带着某种宿命般的冲击力。但你留不住，你能给的，就是那短短一瞬的，<strong>能够改变人一生的光照</strong>。<span class="rs">你不适合\"拥有\"，你适合\"经历\"。</span>',p3:'你是一个谜。就连你自己也是。你善于在规则之外思考，在任何框架之外行动。你不需要被理解——不是因为你不在乎，而是因为<strong>你太清楚，真正的理解需要对方也处在你那个高度。</strong>而你，从来没有等过任何人。',tags:['特立独行','灵感迸发者','瞬间永恒','不属于任何框架'],quote:'—— 他闪烁了一下，然后世界就不一样了。'}
+};
+var ci=0,sc={d:0,n:0,i:0,f:0,p:0,r:0};
+
+function go(){ci=0;sc={d:0,n:0,i:0,f:0,p:0,r:0};sq()}
+function sq(){var a=document.getElementById('ql'),b=document.getElementById('qp'),c=document.getElementById('pf'),d=document.getElementById('qt'),e=document.getElementById('op');if(ci>=Q.length){sr();return}var q=Q[ci];a.textContent=LB[ci]?LB[ci].e:'潜 入 深 处';b.textContent=(ci+1)+' / '+Q.length;c.style.width=((ci+1)/Q.length*100)+'%';d.textContent=q.q;e.innerHTML='';for(var i=0;i<q.O.length;i++){var bt=document.createElement('button');bt.className='ob';bt.textContent=q.O[i].t;bt.onclick=(function(idx){return function(){if(this.disabled)return;var opts=document.querySelectorAll('.ob');for(var j=0;j<opts.length;j++)opts[j].disabled=true;var s=Q[ci].O[idx].s;for(var k in s)sc[k]+=s[k];ci++;setTimeout(sq,400)}})(i);e.appendChild(bt)}document.getElementById('qa').style.display='';document.getElementById('ra').classList.remove('show')}
+function sr(){document.getElementById('qa').style.display='none';document.getElementById('ra').classList.add('show');var mx=0,res='d';for(var k in sc){if(sc[k]>mx){mx=sc[k];res=k}}if(mx===0)res='d';var x=R[res];document.getElementById('ri').textContent=x.icon;document.getElementById('rt').textContent=x.title;document.getElementById('re').textContent=x.en;document.getElementById('rp1').innerHTML=x.p1;document.getElementById('rp2').innerHTML=x.p2;document.getElementById('rp3').innerHTML=x.p3;var tg='';for(var i=0;i<x.tags.length;i++)tg+='<span class="rtg">'+x.tags[i]+'</span>';document.getElementById('rts').innerHTML=tg;document.getElementById('rq').textContent=x.quote;var els=document.querySelectorAll('#ra .rp,#ra .rq,#ra .rts,#ra .rt,#ra .re');for(var i=0;i<els.length;i++){els[i].classList.remove('fade-in');void els[i].offsetWidth;els[i].classList.add('fade-in')}}
+
+
+function go(){ci=0;sc={d:0,n:0,i:0,f:0,p:0,r:0};document.getElementById('ra').classList.remove('show');document.getElementById('qa').style.display='block';sq()}
+function sq(){
+    if(ci>=Q.length){sr();return}
+    var q=Q[ci];
+    document.getElementById('qt').textContent=q.q;
+    document.getElementById('ql').textContent=LB[ci];
+    document.getElementById('qp').textContent=(ci+1)+' / '+Q.length;
+    document.getElementById('pf').style.width=((ci)/Q.length*100)+'%';
+    var o=document.getElementById('opt');o.innerHTML='';
+    o.classList.add('fade-in');setTimeout(function(){o.classList.remove('fade-in')},10);
+    q.O.forEach(function(opt){
+        var b=document.createElement('button');
+        b.className='opt-btn';b.textContent=opt.t;
+        b.onclick=function(){
+            for(var k in opt.s)sc[k]+=opt.s[k];
+            ci++;sq();
+        };
+        o.appendChild(b);
+    });
+}
+function sr(){
+    document.getElementById('pf').style.width='100%';
+    document.getElementById('qp').textContent='15 / 15';
+    document.getElementById('ql').textContent='终 极 命 题';
+    document.getElementById('qa').style.display='none';
+    var mk='d',mv=0;
+    for(var k in sc){if(sc[k]>mv){mv=sc[k];mk=k}}
+    var r=R[mk];
+    document.getElementById('ri').innerHTML=SVI[mk]||'';
+    document.getElementById('rt').textContent=r.title;
+    document.getElementById('re').textContent=r.en;
+    document.getElementById('rp1').innerHTML=r.p1;
+    document.getElementById('rp2').innerHTML=r.p2;
+    document.getElementById('rp3').innerHTML=r.p3;
+    document.getElementById('rq').textContent=r.quote;
+    var tc=document.getElementById('rts');tc.innerHTML='';
+    r.tags.forEach(function(t){var s=document.createElement('span');s.className='rtag';s.textContent=t;tc.appendChild(s)});
+    document.getElementById('ra').classList.add('show');
+    document.getElementById('ra').classList.add('fade-in');
+}
+function reset(){document.getElementById('ra').classList.remove('show');go()}
+</script>
+</body>
+</html>
