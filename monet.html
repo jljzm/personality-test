@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>稀有物种 · 人格原型测试</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap');
+body{font-family:'Noto Serif SC','Microsoft YaHei',serif;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;overflow-x:hidden;background:#1a2a3a}
+:root{--water-deep:#1a2a3a;--lily-pink:#d4898a;--lily-rose:#b8656a;--lily-white:#e8d8d0;--lily-yellow:#d4b87a;--lily-green:#5a7a5a;--haze-blue:#8aacc0;--ivory:#eae0d0;--text:rgba(234,224,208,0.82);--text-dim:rgba(234,224,208,0.3)}
+.bg-wrap{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.bg-canvas{position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse 70% 40% at 20% 30%,rgba(90,122,90,0.15) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 80% 70%,rgba(138,172,192,0.1) 0%,transparent 60%),radial-gradient(ellipse 40% 30% at 50% 20%,rgba(212,136,138,0.08) 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 30% 80%,rgba(106,90,138,0.08) 0%,transparent 50%),radial-gradient(ellipse 50% 40% at 70% 40%,rgba(184,160,112,0.06) 0%,transparent 50%),var(--water-deep)}
+.water-ripple{position:absolute;border-radius:50%;border:1px solid rgba(234,224,208,0.04);animation:rippleExpand 10s ease-out infinite}
+.water-ripple:nth-child(1){width:300px;height:120px;top:25%;left:15%;animation-delay:0s}
+.water-ripple:nth-child(2){width:200px;height:80px;bottom:30%;right:20%;animation-delay:-3s}
+.water-ripple:nth-child(3){width:250px;height:100px;top:55%;left:55%;animation-delay:-6s}
+.water-ripple:nth-child(4){width:180px;height:70px;top:15%;right:30%;animation-delay:-8s}
+@keyframes rippleExpand{0%{transform:scale(0.8);opacity:0}20%{opacity:0.6}100%{transform:scale(2);opacity:0}}
+.lily-blob{position:absolute;border-radius:50%;filter:blur(3px);pointer-events:none;animation:lilyDrift 15s ease-in-out infinite alternate}
+.lily-blob:nth-child(1){width:60px;height:40px;background:radial-gradient(ellipse,rgba(212,136,138,0.12) 0%,transparent 70%);top:35%;left:20%;animation-duration:18s}
+.lily-blob:nth-child(2){width:80px;height:50px;background:radial-gradient(ellipse,rgba(232,216,208,0.08) 0%,transparent 70%);top:55%;left:65%;animation-duration:22s;animation-delay:-5s}
+.lily-blob:nth-child(3){width:50px;height:35px;background:radial-gradient(ellipse,rgba(212,184,122,0.1) 0%,transparent 70%);top:20%;right:25%;animation-duration:16s;animation-delay:-10s}
+.lily-blob:nth-child(4){width:70px;height:45px;background:radial-gradient(ellipse,rgba(106,90,138,0.08) 0%,transparent 70%);bottom:25%;left:40%;animation-duration:20s;animation-delay:-7s}
+.lily-blob:nth-child(5){width:40px;height:30px;background:radial-gradient(ellipse,rgba(184,160,112,0.1) 0%,transparent 70%);top:70%;right:35%;animation-duration:14s;animation-delay:-3s}
+.lily-blob:nth-child(6){width:55px;height:38px;background:radial-gradient(ellipse,rgba(90,122,90,0.1) 0%,transparent 70%);top:10%;left:50%;animation-duration:19s;animation-delay:-12s}
+@keyframes lilyDrift{0%{transform:translate(0,0)scale(1)}30%{transform:translate(15px,-10px)scale(1.05)}60%{transform:translate(-10px,15px)scale(0.95)}100%{transform:translate(8px,-5px)scale(1.02)}}
+.wash{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;animation:washShift 20s ease-in-out infinite alternate}
+.wash:nth-child(7){width:500px;height:300px;background:rgba(90,122,90,0.06);top:30%;left:-100px}
+.wash:nth-child(8){width:400px;height:350px;background:rgba(138,172,192,0.05);bottom:10%;right:-80px;animation-delay:-8s}
+@keyframes washShift{0%{transform:translate(0,0)}50%{transform:translate(30px,-20px)}100%{transform:translate(-20px,30px)}}
+body::after{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+#app{position:relative;z-index:1;width:740px;max-width:100%}
+#splash{text-align:center;padding:60px 30px 50px}
+.splash-flower{font-size:42px;display:block;margin-bottom:16px;animation:sf 4s ease-in-out infinite alternate}
+@keyframes sf{0%{filter:drop-shadow(0 0 10px rgba(212,136,138,0.1))}100%{filter:drop-shadow(0 0 30px rgba(212,136,138,0.25))}}
+.splash-line{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--lily-pink),transparent);margin:0 auto 22px;opacity:0.3}
+.splash-pre{font-size:15px;color:var(--text-dim);line-height:2;letter-spacing:2px;margin-bottom:18px;max-width:520px;margin-left:auto;margin-right:auto}
+.splash-pre strong{color:var(--lily-pink);font-weight:600}
+.splash-quote{font-size:13px;color:rgba(232,216,208,0.12);font-style:italic;letter-spacing:3px;margin-bottom:28px;line-height:1.8}
+.splash-btn{display:inline-block;padding:14px 48px;background:transparent;border:1px solid rgba(212,136,138,0.2);border-radius:30px;color:var(--lily-pink);font-size:15px;font-family:inherit;letter-spacing:6px;cursor:pointer;transition:all 0.4s ease;position:relative}
+.splash-btn::before{content:'';position:absolute;top:-1px;left:-1px;right:-1px;bottom:-1px;border-radius:30px;background:linear-gradient(135deg,rgba(212,136,138,0.1),transparent,rgba(138,172,192,0.05),transparent);opacity:0;transition:opacity 0.4s ease}
+.splash-btn:hover{border-color:rgba(212,136,138,0.4);box-shadow:0 0 40px rgba(212,136,138,0.06),0 0 80px rgba(138,172,192,0.04);transform:translateY(-2px)}
+.splash-btn:hover::before{opacity:1}
+.splash-btn span{position:relative;z-index:1}
+.splash-decree{font-size:10px;color:rgba(234,224,208,0.05);letter-spacing:6px;margin-top:22px}
+.card{background:rgba(26,42,58,0.7);backdrop-filter:blur(18px)saturate(1.1);-webkit-backdrop-filter:blur(18px)saturate(1.1);border-radius:16px;padding:35px;border:1px solid rgba(212,136,138,0.06);box-shadow:0 0 80px rgba(0,0,0,0.4),0 0 120px rgba(212,136,138,0.02),inset 0 0 60px rgba(138,172,192,0.02);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:-50%;left:-20%;width:140%;height:200%;background:radial-gradient(ellipse at 30% 40%,rgba(212,136,138,0.02) 0%,transparent 60%);pointer-events:none}
+.card::after{content:'';position:absolute;bottom:-30%;right:-20%;width:120%;height:150%;background:radial-gradient(ellipse at 60% 60%,rgba(138,172,192,0.02) 0%,transparent 60%);pointer-events:none}
+.cr{position:absolute;width:22px;height:22px;opacity:0.06}
+.cr::before,.cr::after{content:'';position:absolute;background:var(--lily-pink)}
+.cr.tl{top:14px;left:14px}
+.cr.tl::before{width:14px;height:1px;top:0;left:0}
+.cr.tl::after{width:1px;height:14px;top:0;left:0}
+.cr.tr{top:14px;right:14px}
+.cr.tr::before{width:14px;height:1px;top:0;right:0}
+.cr.tr::after{width:1px;height:14px;top:0;right:0}
+.cr.bl{bottom:14px;left:14px}
+.cr.bl::before{width:14px;height:1px;bottom:0;left:0}
+.cr.bl::after{width:1px;height:14px;bottom:0;left:0}
+.cr.br{bottom:14px;right:14px}
+.cr.br::before{width:14px;height:1px;bottom:0;right:0}
+.cr.br::after{width:1px;height:14px;bottom:0;right:0}
+.pw{margin-bottom:26px}
+.pl{display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);letter-spacing:2px;margin-bottom:10px}
+.pb{width:100%;height:2px;background:rgba(212,136,138,0.05);border-radius:1px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--lily-pink),var(--lily-yellow));border-radius:1px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);width:0%;box-shadow:0 0 10px rgba(212,136,138,0.15)}
+#qa{min-height:200px}
+.qt{font-size:19px;color:var(--text);line-height:1.9;margin-bottom:28px;letter-spacing:0.5px;position:relative;padding-left:18px}
+.qt::before{content:'';position:absolute;left:0;top:0.4em;bottom:0.4em;width:2px;background:linear-gradient(180deg,var(--lily-pink),transparent);border-radius:1px}
+.op{display:flex;flex-direction:column;gap:10px}
+.ob{width:100%;padding:15px 20px;background:rgba(234,224,208,0.02);border:1px solid rgba(212,136,138,0.05);border-radius:10px;color:var(--text);font-size:14px;font-family:inherit;cursor:pointer;transition:all 0.25s ease;text-align:left;line-height:1.6;letter-spacing:0.3px}
+.ob:hover{background:rgba(212,136,138,0.06);border-color:rgba(212,136,138,0.15);transform:translateX(5px);box-shadow:0 0 20px rgba(212,136,138,0.03)}
+.ob:disabled{opacity:0.2;cursor:not-allowed;transform:none;box-shadow:none}
+#ra{display:none}
+#ra.show{display:block}
+.rh{text-align:center;margin-bottom:26px}
+.riw{display:inline-block;position:relative;margin-bottom:10px}
+.ric{font-size:72px;display:block;filter:drop-shadow(0 0 25px rgba(212,136,138,0.12));animation:rp 4s ease-in-out infinite alternate}
+@keyframes rp{0%{filter:drop-shadow(0 0 15px rgba(212,136,138,0.08))}100%{filter:drop-shadow(0 0 40px rgba(212,136,138,0.2))}}
+.rrg{position:absolute;top:50%;left:50%;width:104px;height:104px;transform:translate(-50%,-50%);border:1px solid rgba(212,136,138,0.06);border-radius:50%;animation:rr 20s linear infinite}
+.rrg2{position:absolute;top:50%;left:50%;width:120px;height:120px;transform:translate(-50%,-50%);border:1px dashed rgba(212,136,138,0.03);border-radius:50%;animation:rr 30s linear infinite reverse}
+@keyframes rr{0%{transform:translate(-50%,-50%)rotate(0deg)}100%{transform:translate(-50%,-50%)rotate(360deg)}}
+.rt{font-size:30px;color:var(--lily-pink);font-weight:700;letter-spacing:6px;margin-bottom:4px}
+.re{font-size:11px;color:var(--text-dim);letter-spacing:4px;text-transform:uppercase}
+.rdv{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--lily-pink),transparent);margin:20px auto;opacity:0.2}
+.rb{column-count:2;column-gap:24px;column-rule:1px solid rgba(212,136,138,0.02);text-align:justify}
+.rp{font-size:14px;color:var(--text);line-height:2.05;letter-spacing:0.4px;break-inside:avoid;margin-bottom:18px;opacity:0.82}
+.rp strong{color:var(--lily-pink);font-weight:600;opacity:1}
+.rp .rs{color:var(--haze-blue)}
+.rts{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;break-inside:avoid}
+.rtg{display:inline-block;padding:3px 14px;border:1px solid rgba(212,136,138,0.1);border-radius:20px;color:rgba(212,136,138,0.4);font-size:11px;letter-spacing:1px}
+.rq{font-size:13px;color:rgba(234,224,208,0.15);font-style:italic;text-align:right;margin-top:16px;letter-spacing:1px;border-top:1px solid rgba(212,136,138,0.02);padding-top:16px}
+.fade-in{animation:fi 0.55s cubic-bezier(0.34,1.56,0.64,1) forwards}
+@keyframes fi{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.hidden{display:none!important}
+@media(max-width:600px){.card{padding:20px;border-radius:12px}.rb{column-count:1}.qt{font-size:16px;padding-left:14px}.rt{font-size:24px}#splash{padding:40px 20px 30px}.splash-pre{font-size:14px}}
+</style>
+</head>
+<body>
+<div class="bg-wrap"><div class="bg-canvas"></div><div class="water-ripple"></div><div class="water-ripple"></div><div class="water-ripple"></div><div class="water-ripple"></div><div class="lily-blob"></div><div class="lily-blob"></div><div class="lily-blob"></div><div class="lily-blob"></div><div class="lily-blob"></div><div class="lily-blob"></div><div class="wash"></div><div class="wash"></div></div>
+<div id="app">
+<div id="splash"><span class="splash-flower">&#x2601;</span><div class="splash-line"></div><div class="splash-pre">在这个越来越孤立与冷漠的世界里，<br>每个人都在寻找自己存在的痕迹。<br>你以为自己普通。<br>但有些特质，<strong>比任何标签都稀有，且无法被复刻</strong>.</div><div class="splash-quote">「世界上没有两片完全相同的云，<br>也没有两个完全相同的你。」</div><button class="splash-btn" onclick="enter()"><span>开始测试</span></button><div class="splash-decree">&#x2601; &#x2601; &#x2601;</div></div>
+<div id="tc" class="hidden">
+<div class="card">
+<div class="cr tl"></div><div class="cr tr"></div><div class="cr bl"></div><div class="cr br"></div>
+<div class="pw"><div class="pl"><span id="ql">潜 入 深 处</span><span id="qp">1 / 15</span></div><div class="pb"><div class="pf" id="pf"></div></div></div>
+<div id="qa"><div class="qt" id="qt"></div><div class="op" id="op"></div></div>
+<div id="ra">
+<div class="rh"><div class="riw"><span class="ric" id="ri"></span><div class="rrg"></div><div class="rrg2"></div></div><div class="rt" id="rt"></div><div class="re" id="re"></div></div>
+<div class="rdv"></div>
+<div class="rb"><div class="rp" id="rp1"></div><div class="rp" id="rp2"></div><div class="rp" id="rp3"></div><div class="rts" id="rts"></div></div>
+<div class="rq" id="rq"></div>
+<div style="text-align:center;margin-top:20px"><button class="splash-btn" onclick="reset()" style="padding:10px 36px;font-size:13px"><span>重新探寻</span></button></div>
+</div>
+</div>
+</div>
+</div>
+<script>
+function enter(){document.getElementById('splash').classList.add('hidden');document.getElementById('tc').classList.remove('hidden');go()}
+function reset(){document.getElementById('ra').classList.remove('show');document.getElementById('qa').style.display='';go()}
+
+const Q=[
+{q:'你凝视水面时看见了自己的倒影——但那个影子似乎比"你"更陌生。当你意识到"自我"其实是一个不断被叙述的故事时，你的感受更接近哪一种？',O:[{t:'感到不安——如果自我是建构的，那我到底是谁？',s:{d:0,n:0,i:1,f:0,p:0,r:1}},{t:'释然——既然是故事，我就可以重新讲述它',s:{d:1,n:0,i:0,f:0,p:1,r:0}},{t:'好奇——谁在讲述这个故事？谁在听？',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'无所谓——故事也好，真实也好，我都在这里',s:{d:0,n:0,i:0,f:1,p:0,r:0}}]},
+{q:'如果你有机会"卸载"一段记忆——保留事实，只删除与之相关的情绪。你会做出这个选择吗？',O:[{t:'会——那是我想要的自在',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'不会——那些情绪塑造了我，删除它们等于背叛了自己',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'犹豫——我不确定没有了情绪的记忆，还算不算"我的"',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'好奇——删除之后，我会不会用另一种方式重新感受它？',s:{d:0,n:0,i:1,f:0,p:0,r:1}}]},
+{q:'当你对某个人产生强烈的反感时，你更倾向于如何看待这种情绪？',O:[{t:'这份反感或许反映了我自己不愿承认的部分',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'我的感受是有根据的——那个人确实有问题',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'我会分析——这种反感从何而来？创伤还是价值观冲突？',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'接受它，但不被它驱动',s:{d:0,n:0,i:1,f:0,p:0,r:0}}]},
+{q:'深夜有人在楼下喊你的名字。你的第一反应是？',O:[{t:'认定是听错了——理性的解释优先',s:{d:0,n:0,i:1,f:0,p:1,r:0}},{t:'心里隐约相信可能是某种不可见的存在',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'心跳加速，但不会去求证',s:{d:0,n:0,i:0,f:0,p:0,r:1}},{t:'走向窗边——必须亲眼确认',s:{d:0,n:0,i:0,f:1,p:0,r:0}}]},
+{q:'如果可以让你内心的某个声音永远沉默——那个总是贬低你、质疑你的声音——你愿意吗？',O:[{t:'愿意——它是我痛苦的根源',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'不愿意——它严厉，但也让我保持清醒',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'不确定——那声音也许有它存在的意义',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'我愿意，但我知道它不会真正消失',s:{d:1,n:0,i:0,f:0,p:0,r:0}}]},
+{q:'你做了一个决定，事后发现这个决定让很多人受益，唯独让你自己付出了代价。你的内心归因更接近？',O:[{t:'我本可以做出更好的选择',s:{d:0,n:0,i:0,f:0,p:1,r:0}},{t:'这本身就是我选择的意义——承担代价是我的意愿',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'这反映了某种深层模式——我需要理解它',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'不值得——我当初不该这么做',s:{d:0,n:0,i:1,f:0,p:0,r:0}}]},
+{q:'你走进一座古老的图书馆，空气中有樟木和时间的味道。书架上有一本书脊上没有标题的书。你会？',O:[{t:'抽出来——没有标题本身就是一种邀请',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'先看看其他有标题的书，最后再回来面对它',s:{d:0,n:0,i:0,f:0,p:1,r:0}},{t:'不碰它——有些未知不应该被打开',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'抽出它，但不会马上翻开——先感受它的重量和质感',s:{d:1,n:0,i:0,f:0,p:0,r:0}}]},
+{q:'如果你可以在没有任何社会惩罚的前提下，做一件完全"不道德"的事——你会想做什么？',O:[{t:'什么都不想做——道德对我而言不是约束，而是本能',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'我会想象它，但不会做——因为我的超我已经内化了规则',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'说实话，我脑海里闪过了一些画面',s:{d:0,n:0,i:0,f:0,p:0,r:0}},{t:'我在想的是——这个假设本身就是危险的',s:{d:0,n:0,i:1,f:1,p:0,r:0}}]},
+{q:'有人对你说："你变了。"你觉得这句话的背后隐含的是什么？',O:[{t:'成长本身就是一种背叛——对过去自己的背叛',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'我不在乎别人怎么看我',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'也许我真的变了——这让我重新审视自己',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'变或不变，我都是我，只是不同层面的显现',s:{d:0,n:0,i:1,f:0,p:0,r:1}}]},
+{q:'在你感到"存在性空虚"——也就是一切似乎都没有意义的时候——你的应对方式是？',O:[{t:'投身于创造——用做一些事来对抗虚无',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'阅读和思考——寻找他人如何面对这个问题',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'接受空虚——它可能不是敌人，而是必要的间隙',s:{d:0,n:0,i:1,f:0,p:0,r:1}},{t:'去连接——见朋友、和家人在一起',s:{d:1,n:0,i:0,f:0,p:1,r:0}}]},
+{q:'你站在高处——悬崖边、楼顶或阳台——往下看时会涌起一种复杂的冲动。那种感觉更接近哪一种描述？',O:[{t:'一种隐秘的吸引力——"如果跳下去会怎样？"',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'紧紧后退——身体比意识更知道危险',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'平静——高处让我感到自己是宏大叙事的一部分',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'兴奋——想迎风大喊',s:{d:0,n:0,i:0,f:1,p:0,r:0}}]},
+{q:'如果你照镜子时，镜子里的你突然做了一组与你不同的表情。你的第一反应是？',O:[{t:'盯着看——想知道ta接下来会做什么',s:{d:0,n:1,i:0,f:0,p:0,r:0}},{t:'后退——身体比意识更快感到了恐惧',s:{d:0,n:0,i:0,f:0,p:0,r:1}},{t:'强迫自己再做出一个表情，试图夺回控制',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'微笑——也许这才是"真实的我"',s:{d:1,n:0,i:0,f:0,p:0,r:0}}]},
+{q:'有人说："你喜欢的音乐暴露了你的防御机制。"你的第一反应是？',O:[{t:'想知道我的歌单揭示了什么',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'我觉得这太武断了',s:{d:0,n:0,i:0,f:1,p:0,r:0}},{t:'不自觉地想到自己最常听的几首歌',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'有点不舒服——不想被看穿',s:{d:1,n:0,i:0,f:0,p:0,r:0}}]},
+{q:'你在一段关系中发现自己总是反复吸引某一类型的人——即使你明确知道这种关系模式不健康。你觉得这是因为？',O:[{t:'也许我知道——我始终不确定自己值得怎样的爱',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'我在重复某种童年时期的依恋模式',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'因为那种人对我来说有某种致命的吸引力',s:{d:0,n:0,i:0,f:0,p:0,r:0}},{t:'我确实注意到了这个模式，但不知道如何打破它',s:{d:0,n:0,i:1,f:0,p:1,r:0}}]},
+{q:'在你生命的最后一刻，你希望自己最后一句想说的话是什么？',O:[{t:'"我尽力了。"',s:{d:1,n:0,i:0,f:0,p:0,r:0}},{t:'"我看到了别人没看到的东西。"',s:{d:0,n:1,i:0,f:0,p:0,r:1}},{t:'"原来如此。"',s:{d:0,n:0,i:1,f:0,p:0,r:0}},{t:'"我从未熄灭。"',s:{d:0,n:0,i:0,f:1,p:0,r:0}}]}
+];
+const R={
+d:{icon:'\u{1F329}',title:'乳状云',en:'Mammatus Clouds',p1:'你看似柔和——像暴风雨前夕悬挂在天空的袋状云朵，绵软、低垂、仿佛不堪一击。但真正穿越过风暴的人会告诉你一个秘密：这些云朵悬在那里，不是因为软弱，而是因为它们正在承受整片天空的重量。<strong>你的温柔是一种经过选择的力量</strong>，而非天性的退让。',p2:'那些被你接住的人可能永远不会知道，你早已独自穿越过无数场暴雨。你从不展示伤口，但伤口已经长成了你的骨骼。你有一种近乎固执的平静——不是感受不到痛，而是你比任何人都清楚：<span class="rs">暴风雨终会过去，而留下来的人，是你</span>。',p3:'在这个鼓励尖叫的世界里，你选择了沉默的支撑。不是妥协，而是一种更深层的抵抗。你的力量不在摧毁，而在——当所有喧嚣平息之后，你依然站在那里，<strong>像天空本身</strong>。',tags:['柔中带刚','沉默的支撑者','风雨中的定力','经过选择的温柔'],quote:'—— 云不知道自己有多重，直到它托住了整场雨。'},
+n:{icon:'\u{1F30C}',title:'夜光云',en:'Noctilucent Clouds',p1:'你属于深夜。不是因为你阴郁，而是因为——<strong>只有在最深的黑暗中，才能看见你的光芒。</strong>夜光云——地球上最高的云，出现在大气层边缘，在夏夜的暮光中发出银蓝色的微光。它们如此罕见，以至于大多数人终其一生也无缘目睹。而你，就是这种存在。',p2:'你不容易被定义。你身上有一种\"来自很远的地方\"的气质——不是疏离，而是自有其轨道的从容。当别人忙着融入人群时，你在仰望你内心的宇宙。你不害怕孤独，因为你早已在孤独中找到了自己的语言。<span class="rs">那些不理解你的人，只是还没有学会如何在黑暗中辨认光芒。</span>',p3:'有人觉得你难以靠近。他们说对了一半——你确实不属于喧嚣的白天。但如果一个人走进了你的夜晚，他们会发现，你的光不是反射别人的，<strong>而是自己发出来的</strong>——而且那种光，比任何阳光都更温柔、更持久。',tags:['独行者','心怀远方','孤独但不寂寞','自有轨道'],quote:'—— 有些星星只在最深的夜里才肯现身。'},
+i:{icon:'\u{2744}',title:'冰针',en:'Diamond Dust',p1:'你是一种细微而坚定的存在。冰针——零下数十度的空气中悬浮的微小冰晶，肉眼几乎看不见，但在阳光照耀的瞬间，它们会折射出钻石般的光芒。<strong>在最严酷的环境里，你依然保有自己的光泽。</strong>你的伟大不在于轰轰烈烈，而在于那些不为人知的、细碎的坚持。',p2:'你可能不是第一眼就会被注意到的人。你也不追求这个。但真正走近你的人，会慢慢发现你的沉稳与坚韧——就像在冬日清晨突然看见空气中闪烁的钻石尘。那不是炫耀的光芒，而是一种<span class="rs">存在的证明</span>：在最寒冷的时候，你依然在发光。不是为了谁，只是因为你本来就可以。',p3:'你身上有一种不动声色的力量。不张扬、不喧嚣，却无人可以忽视。你的力量不在于能掀起多大的波澜，而在于——当一切都冻结的时候，<strong>你依然是那个在空气中细细闪烁的存在。</strong>微小，但不容否认。',tags:['于无声处闪耀','坚韧如冰','冷静的观察者','不炫耀的力量'],quote:'—— 钻石是碳原子在巨大压力下排列出的光芒。'},
+f:{icon:'\u26A1',title:'圣艾尔摩之火',en:'St. Elmo\'s Fire',p1:'你身上有一种令人不安的炽热。圣艾尔摩之火——雷暴天气中出现在船桅顶端的电晕放电现象，它不是火焰，却有着火焰的形态和温度。你不是传统意义上的\"暴脾气\"，但你的能量是不可忽视的。<strong>当氛围不对时，你能第一个感觉到空气中带电粒子的骚动。</strong>你是风暴来临前空气里那一声无声的震颤。',p2:'你相信直觉，有时甚至到了近乎迷信的地步。不是因为你不理性，而是因为你捕捉到了太多别人忽略的信号——那些细微的，几乎无法言说的变化。你常常发现自己比所有人都更早\"闻到风雨的味道\"。<span class="rs">这不是超能力，而是你对世界保持着一种原始的，未被驯化的敏感。</span>',p3:'你最大的矛盾在于：你比谁都清晰，又比谁都冲动。你的行动总是先于语言，你的选择总是先于算计。但正是这种先于理智的决断力，让你在最关键的时刻做出了别人要犹豫很久才能做到的决定。<strong>你不是没有恐惧，而是愿意带着恐惧行动。</strong>',tags:['直觉敏锐','能量充沛','冲动但真诚','风暴的引信'],quote:'—— 船桅顶端的火光不是火，是空气在暴雨前发出的声音。'},
+p:{icon:'\u{1F319}',title:'日柱',en:'Sun Pillar',p1:'你是微弱中的坚定发光者。日柱——阳光穿过冰晶折射形成的垂直光柱，它不像彩虹那样铺天盖地，而是一条笔直的，沉默的，向上的光路。你不是最明亮的光源，但你所散发出的光芒<strong>可以穿透一切</strong>。你的坚定，从来不需要很大的声音。',p2:'你有一种让人安心的持续性。不是那种激情四射的，而是细水长流的——每一天你都在，每一个你需要出现的时刻你都出现了。你给人的安全感，不是因为你承诺了什么，而是因为你<strong>一直在那里</strong>。<span class="rs">人们对你的信任，像光柱一样，是慢慢竖立起来的。</span>',p3:'你可能不太习惯成为焦点。但你知道吗？你不做焦点的时候，反而最耀眼。你像那些在极寒中静止的冰晶——你不需要移动，你的存在本身<strong>就已经足以指引方向</strong>。你照亮的是别人正在走的这条路，而不是你自己。',tags:['温和而坚定','可靠的光源','不喧哗自有声','他是引路人'],quote:'—— 最安静的光，往往照得最远。'},
+r:{icon:'\u{26A1}',title:'红色精灵',en:'Red Sprites',p1:'你是这个世界上最难以捕捉的存在。红色精灵——发生在距离地面50至90公里高空的巨大放电现象，持续时间仅数毫秒，转瞬即逝，如同宇宙对你眨了眨眼。你有一种极端的美感，但这种美<strong>永远在消逝的边缘</strong>。别人追不上你，不是因为看不到你，而是因为——你来得太突然，走得又太干净。',p2:'你身上有一种\"完整地在场却又随时会离开\"的特质。你出现在别人的生命里时，总是带着某种宿命般的冲击力。但你留不住，你能给的，就是那短短一瞬的，<strong>能够改变人一生的光照</strong>。<span class="rs">你不适合\"拥有\"，你适合\"经历\"。</span>',p3:'你是一个谜。就连你自己也是。你善于在规则之外思考，在任何框架之外行动。你不需要被理解——不是因为你不在乎，而是因为<strong>你太清楚，真正的理解需要对方也处在你那个高度。</strong>而你，从来没有等过任何人。',tags:['特立独行','灵感迸发者','瞬间永恒','不属于任何框架'],quote:'—— 他闪烁了一下，然后世界就不一样了。'}
+};
+var ci=0,sc={d:0,n:0,i:0,f:0,p:0,r:0};
+var LB=[{s:"?",e:"似曾相识的感觉在暗涌..."},{s:"?",e:"你比你想象的更复杂..."},{s:"?",e:"上一道题，你犹豫了吗?"},{s:"?",e:"答案没有对错，只有你自己..."},{s:"?",e:"水底的暗流，开始浮出水面..."},{s:"?",e:"有些特质，只会在选择中显露..."},{s:"?",e:"就像画笔触碰水面的瞬间..."},{s:"?",e:"你的云，正在成形..."},{s:"?",e:"莫奈画了无数次睡莲..."},{s:"?",e:"你也在画自己..."},{s:"?",e:"越往深处，越接近本真..."},{s:"?",e:"听听水底的声音..."},{s:"?",e:"雾气散去的时刻..."},{s:"?",e:"你站在哪一片云下?"},{s:"?",e:"最后的光，也是最清晰的..."}];
+function go(){ci=0;sc={d:0,n:0,i:0,f:0,p:0,r:0};sq()}
+function sq(){var a=document.getElementById('ql'),b=document.getElementById('qp'),c=document.getElementById('pf'),d=document.getElementById('qt'),e=document.getElementById('op');if(ci>=Q.length){sr();return}var q=Q[ci];a.textContent=LB[ci]?LB[ci].e:'潜 入 深 处';b.textContent=(ci+1)+' / '+Q.length;c.style.width=((ci+1)/Q.length*100)+'%';d.textContent=q.q;e.innerHTML='';for(var i=0;i<q.O.length;i++){var bt=document.createElement('button');bt.className='ob';bt.textContent=q.O[i].t;bt.onclick=(function(idx){return function(){if(this.disabled)return;var opts=document.querySelectorAll('.ob');for(var j=0;j<opts.length;j++)opts[j].disabled=true;var s=Q[ci].O[idx].s;for(var k in s)sc[k]+=s[k];ci++;setTimeout(sq,400)}})(i);e.appendChild(bt)}document.getElementById('qa').style.display='';document.getElementById('ra').classList.remove('show')}
+function sr(){document.getElementById('qa').style.display='none';document.getElementById('ra').classList.add('show');var mx=0,res='d';for(var k in sc){if(sc[k]>mx){mx=sc[k];res=k}}if(mx===0)res='d';var x=R[res];document.getElementById('ri').textContent=x.icon;document.getElementById('rt').textContent=x.title;document.getElementById('re').textContent=x.en;document.getElementById('rp1').innerHTML=x.p1;document.getElementById('rp2').innerHTML=x.p2;document.getElementById('rp3').innerHTML=x.p3;var tg='';for(var i=0;i<x.tags.length;i++)tg+='<span class="rtg">'+x.tags[i]+'</span>';document.getElementById('rts').innerHTML=tg;document.getElementById('rq').textContent=x.quote;var els=document.querySelectorAll('#ra .rp,#ra .rq,#ra .rts,#ra .rt,#ra .re');for(var i=0;i<els.length;i++){els[i].classList.remove('fade-in');void els[i].offsetWidth;els[i].classList.add('fade-in')}}
+</script>
+</body>
+</html>
